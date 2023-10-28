@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Common.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Common.Data
+namespace Common.Data;
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public DbSet<Paste> Pastes { get; set; }
+    public DbSet<Syntax> Syntaxes { get; set; }
+    public DbSet<Folder> Folders { get; set; }
+    public DbSet<ApiTokens> ApiTokens { get; set; }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
     }
 }
