@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models;
 
-public class ApiTokens
+public class ApiToken
 {
     [Flags]
     public enum APIPermissions

@@ -9,7 +9,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Paste> Pastes { get; set; }
     public DbSet<Syntax> Syntaxes { get; set; }
     public DbSet<Folder> Folders { get; set; }
-    public DbSet<ApiTokens> ApiTokens { get; set; }
+    public DbSet<ApiToken> ApiTokens { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
