@@ -35,7 +35,7 @@ public class ApiToken
     public string Token { get; set; }
     public APIPermissions Permissions { get; set; }
     public DateTime CreationDate { get; set; }
-    public DateTime ModifiedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
 
     public virtual ApplicationUser User { get; set; }
 }

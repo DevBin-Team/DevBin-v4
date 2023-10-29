@@ -32,7 +32,9 @@ public class ApiTokenFilter : IAsyncAuthorizationFilter
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         var apiTokenKey = context.HttpContext.Request.Headers.Authorization.ToString();
-        var apiToken = await _dbContext.ApiTokens.FirstOrDefaultAsync(q => q.Token == apiTokenKey);
+        var apiToken = await _dbContext.ApiTokens
+            .Include(q => q.User)
+            .FirstOrDefaultAsync(q => q.Token == apiTokenKey);
         if (apiToken == null)
         {
             context.Result = new UnauthorizedResult();

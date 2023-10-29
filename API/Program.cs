@@ -56,18 +56,29 @@ builder.Services.AddSwaggerGen(options =>
 
     var securityScheme = new OpenApiSecurityScheme()
     {
-        Name = "Authentication",
         Description = "Specify the API authorization token.",
+        Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
+        Scheme = "Authorization",
     };
 
-    options.AddSecurityDefinition("Bearer", securityScheme);
-    /*options.AddSecurityRequirement(new()
+    options.AddSecurityDefinition("api_key", securityScheme);
+
+    var requirements = new OpenApiSecurityRequirement
     {
-        {securityScheme, Array.Empty<string>() }
-    });*/
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "api_key"
+                }
+            }, Array.Empty<string>()
+        }
+    };
+    options.AddSecurityRequirement(requirements);
 });
 
 var app = builder.Build();

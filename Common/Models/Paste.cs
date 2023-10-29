@@ -17,7 +17,7 @@ public class Paste
     public string Code { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
-    public DateTime? ExpirationDate { get; set; }
+    public DateTime? ExpireDate { get; set; }
     [MaxLength(255)]
     public string Name { get; set; }
     public string Content { get; set; }
