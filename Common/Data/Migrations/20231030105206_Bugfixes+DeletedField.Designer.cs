@@ -3,6 +3,7 @@ using System;
 using Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Common.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030105206_Bugfixes+DeletedField")]
+    partial class BugfixesDeletedField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,6 +162,10 @@ namespace Common.Data.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("varchar(32)");
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime(6)");
 
@@ -204,26 +211,9 @@ namespace Common.Data.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.HasIndex("Hash");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Pastes");
-                });
-
-            modelBuilder.Entity("Common.Models.PasteContent", b =>
-                {
-                    b.Property<string>("Hash")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Hash");
-
-                    b.ToTable("PasteContents");
                 });
 
             modelBuilder.Entity("Common.Models.Syntax", b =>
@@ -399,19 +389,11 @@ namespace Common.Data.Migrations
                         .WithMany("Pastes")
                         .HasForeignKey("FolderId");
 
-                    b.HasOne("Common.Models.PasteContent", "PasteContent")
-                        .WithMany("Pastes")
-                        .HasForeignKey("Hash")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Common.Models.ApplicationUser", "User")
                         .WithMany("Pastes")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Folder");
-
-                    b.Navigation("PasteContent");
 
                     b.Navigation("User");
                 });
@@ -475,11 +457,6 @@ namespace Common.Data.Migrations
                 });
 
             modelBuilder.Entity("Common.Models.Folder", b =>
-                {
-                    b.Navigation("Pastes");
-                });
-
-            modelBuilder.Entity("Common.Models.PasteContent", b =>
                 {
                     b.Navigation("Pastes");
                 });

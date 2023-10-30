@@ -3,6 +3,7 @@ using System;
 using Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Common.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030111535_AddPasteContentsTable")]
+    partial class AddPasteContentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,8 +207,6 @@ namespace Common.Data.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.HasIndex("Hash");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Pastes");
@@ -214,8 +215,7 @@ namespace Common.Data.Migrations
             modelBuilder.Entity("Common.Models.PasteContent", b =>
                 {
                     b.Property<string>("Hash")
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -399,19 +399,11 @@ namespace Common.Data.Migrations
                         .WithMany("Pastes")
                         .HasForeignKey("FolderId");
 
-                    b.HasOne("Common.Models.PasteContent", "PasteContent")
-                        .WithMany("Pastes")
-                        .HasForeignKey("Hash")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Common.Models.ApplicationUser", "User")
                         .WithMany("Pastes")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Folder");
-
-                    b.Navigation("PasteContent");
 
                     b.Navigation("User");
                 });
@@ -475,11 +467,6 @@ namespace Common.Data.Migrations
                 });
 
             modelBuilder.Entity("Common.Models.Folder", b =>
-                {
-                    b.Navigation("Pastes");
-                });
-
-            modelBuilder.Entity("Common.Models.PasteContent", b =>
                 {
                     b.Navigation("Pastes");
                 });

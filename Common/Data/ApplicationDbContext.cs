@@ -8,6 +8,7 @@ namespace Common.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
     public DbSet<Paste> Pastes { get; set; }
+    public DbSet<PasteContent> PasteContents { get; set; }
     public DbSet<Syntax> Syntaxes { get; set; }
     public DbSet<Folder> Folders { get; set; }
     public DbSet<ApiToken> ApiTokens { get; set; }
