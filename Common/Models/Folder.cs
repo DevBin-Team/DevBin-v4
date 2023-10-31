@@ -16,5 +16,6 @@ public class Folder
     [MaxLength(255)]
     public string Slug { get; set; }
 
+    public virtual ApplicationUser User { get; set; }
     public virtual ICollection<Paste> Pastes { get; set; }
 }

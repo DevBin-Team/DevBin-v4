@@ -4,14 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using System.Security;
 using static Common.Models.ApiToken;
 
 namespace API.Authentication;
 
-public class ApiTokenAttribute : TypeFilterAttribute
+public class RequireApiTokenAttribute : TypeFilterAttribute
 {
-    public ApiTokenAttribute(APIPermissions permissions = APIPermissions.None) : base(typeof(ApiTokenFilter))
+    public RequireApiTokenAttribute(APIPermissions permissions = APIPermissions.None) : base(typeof(ApiTokenFilter))
     {
         Arguments = [permissions];
     }

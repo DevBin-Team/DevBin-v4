@@ -3,6 +3,7 @@ using System;
 using Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Common.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231031101821_AddUserCreationDateField")]
+    partial class AddUserCreationDateField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +131,9 @@ namespace Common.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -143,7 +149,7 @@ namespace Common.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Folders");
                 });
@@ -388,13 +394,9 @@ namespace Common.Data.Migrations
 
             modelBuilder.Entity("Common.Models.Folder", b =>
                 {
-                    b.HasOne("Common.Models.ApplicationUser", "User")
+                    b.HasOne("Common.Models.ApplicationUser", null)
                         .WithMany("Folders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Common.Models.Paste", b =>
@@ -410,7 +412,7 @@ namespace Common.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Common.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Pastes")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Folder");
@@ -474,6 +476,8 @@ namespace Common.Data.Migrations
             modelBuilder.Entity("Common.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Folders");
+
+                    b.Navigation("Pastes");
                 });
 
             modelBuilder.Entity("Common.Models.Folder", b =>

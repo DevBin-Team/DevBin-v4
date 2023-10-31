@@ -9,6 +9,7 @@ namespace Common.Models;
 
 public class ApplicationUser : IdentityUser<int>
 {
-    public virtual ICollection<Paste> Pastes { get; set; }
+    public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+    //public virtual ICollection<Paste> Pastes { get; set; }
     public virtual ICollection<Folder> Folders { get; set; }
 }

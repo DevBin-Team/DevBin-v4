@@ -26,8 +26,7 @@ public class PastesController : ControllerBase
         _userManager = userManager;
     }
 
-    [NonAction]
-    public ApiPaste ToApiPaste(Paste paste)
+    public static ApiPaste ToApiPaste(Paste paste)
     {
         var apiPaste = new ApiPaste
         {
@@ -47,14 +46,8 @@ public class PastesController : ControllerBase
         return apiPaste;
     }
 
-    [HttpGet("random")]
-    public async Task<string> Random()
-    {
-        return await _dbContext.GeneratePasteCodeAsync();
-    }
-
     [HttpGet("{code}")]
-    [ApiToken(APIPermissions.GetPaste)]
+    [RequireApiToken(APIPermissions.GetPaste)]
     public async Task<ActionResult<ApiPaste>> GetPaste(string code)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -76,7 +69,7 @@ public class PastesController : ControllerBase
 
 
     [HttpGet("{code}/content")]
-    [ApiToken(APIPermissions.GetPaste)]
+    [RequireApiToken(APIPermissions.GetPaste)]
     public async Task<ActionResult<string>> GetPasteContent(string code)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -100,7 +93,7 @@ public class PastesController : ControllerBase
     }
 
     [HttpPost]
-    [ApiToken(APIPermissions.CreatePaste)]
+    [RequireApiToken(APIPermissions.CreatePaste)]
     public async Task<ActionResult<ApiPaste>> CreatePaste([FromBody] UserPaste paste)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -155,7 +148,7 @@ public class PastesController : ControllerBase
     }
 
     [HttpDelete("{code}")]
-    [ApiToken(APIPermissions.DeletePaste)]
+    [RequireApiToken(APIPermissions.DeletePaste)]
     public async Task<ActionResult> DeletePaste(string code)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -176,7 +169,7 @@ public class PastesController : ControllerBase
     }
 
     [HttpPatch("{code}")]
-    [ApiToken(APIPermissions.UpdatePaste)]
+    [RequireApiToken(APIPermissions.UpdatePaste)]
     public async Task<ActionResult<ApiPaste>> UpdatePaste(string code, UserPaste userPaste)
     {
         var user = await _userManager.GetUserAsync(User);
