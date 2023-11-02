@@ -46,6 +46,11 @@ public class PastesController : ControllerBase
         return apiPaste;
     }
 
+    /// <summary>
+    /// Get information about a paste.
+    /// </summary>
+    /// <param name="code">The unique code of the paste.</param>
+    /// <returns></returns>
     [HttpGet("{code}")]
     [RequireApiToken(APIPermissions.GetPaste)]
     public async Task<ActionResult<ApiPaste>> GetPaste(string code)
@@ -67,7 +72,11 @@ public class PastesController : ControllerBase
         return ToApiPaste(paste);
     }
 
-
+    /// <summary>
+    /// Get the content of a paste.
+    /// </summary>
+    /// <param name="code">The unique code of the paste.</param>
+    /// <returns></returns>
     [HttpGet("{code}/content")]
     [RequireApiToken(APIPermissions.GetPaste)]
     public async Task<ActionResult<string>> GetPasteContent(string code)
@@ -92,6 +101,12 @@ public class PastesController : ControllerBase
         return paste.Content;
     }
 
+    /// <summary>
+    /// Create a paste.
+    /// Exposure is an integer.
+    /// </summary>
+    /// <param name="paste">The paste information to submit.</param>
+    /// <returns></returns>
     [HttpPost]
     [RequireApiToken(APIPermissions.CreatePaste)]
     public async Task<ActionResult<ApiPaste>> CreatePaste([FromBody] UserPaste paste)
@@ -147,6 +162,11 @@ public class PastesController : ControllerBase
         return ToApiPaste(newPaste);
     }
 
+    /// <summary>
+    /// Delete a paste fo yours.
+    /// </summary>
+    /// <param name="code">The unique code of the paste.</param>
+    /// <returns></returns>
     [HttpDelete("{code}")]
     [RequireApiToken(APIPermissions.DeletePaste)]
     public async Task<ActionResult> DeletePaste(string code)
@@ -168,6 +188,14 @@ public class PastesController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Update fields of a paste of yours.
+    /// 
+    /// Setting the folder to `-1` will move it out of it.
+    /// </summary>
+    /// <param name="code">The code of the paste.</param>
+    /// <param name="userPaste">The paste with the fields to update.</param>
+    /// <returns></returns>
     [HttpPatch("{code}")]
     [RequireApiToken(APIPermissions.UpdatePaste)]
     public async Task<ActionResult<ApiPaste>> UpdatePaste(string code, UserPaste userPaste)
@@ -226,5 +254,16 @@ public class PastesController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Get all syntaxes that the service knows about.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("syntaxes")]
+    [RequireApiToken(APIPermissions.None)]
+    public async Task<ActionResult<IEnumerable<Syntax>>> GetSyntaxes()
+    {
+        return await _dbContext.Syntaxes.ToListAsync();
     }
 }

@@ -22,7 +22,7 @@ public class UsersController : ControllerBase
     }
 
     [NonAction]
-    public async Task<IEnumerable<Models.Paste>> GetUserPastes(ApplicationUser user, bool publicOnly)
+    public IEnumerable<Models.Paste> GetUserPastes(ApplicationUser user, bool publicOnly)
     {
         var pastes = _dbContext.Pastes
             .Include(p => p.User)
@@ -33,6 +33,10 @@ public class UsersController : ControllerBase
             return pastes.Select(PastesController.ToApiPaste);
     }
 
+    /// <summary>
+    /// Information about your user.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("me")]
     [RequireApiToken(ApiToken.APIPermissions.GetMe)]
     public async Task<ActionResult<User>> GetMe()
@@ -56,6 +60,11 @@ public class UsersController : ControllerBase
         };
     }
 
+    /// <summary>
+    /// Information about an user.
+    /// </summary>
+    /// <param name="username">The username.</param>
+    /// <returns></returns>
     [HttpGet("{username}")]
     [RequireApiToken(ApiToken.APIPermissions.GetUser)]
     public async Task<ActionResult<User>> GetUser(string username)
@@ -83,6 +92,11 @@ public class UsersController : ControllerBase
         };
     }
 
+
+    /// <summary>
+    /// A list of all the pastes you created.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("me/pastes")]
     [RequireApiToken(ApiToken.APIPermissions.GetPaste | ApiToken.APIPermissions.GetMe)]
     public async Task<ActionResult<IEnumerable<Models.Paste>>> GetUserPastes()
@@ -91,11 +105,16 @@ public class UsersController : ControllerBase
         if (me == null)
             return NotFound();
 
-        var pastes = await GetUserPastes(me, false);
+        var pastes = GetUserPastes(me, false);
 
         return Ok(pastes);
     }
 
+    /// <summary>
+    /// A list of all the public pastes the user created.
+    /// </summary>
+    /// <param name="username">Username</param>
+    /// <returns></returns>
     [HttpGet("{username}/pastes")]
     [RequireApiToken(ApiToken.APIPermissions.GetPaste | ApiToken.APIPermissions.GetUser)]
     public async Task<ActionResult<IEnumerable<Models.Paste>>> GetUserPastes(string username)
@@ -108,7 +127,7 @@ public class UsersController : ControllerBase
         if (user == null)
             return NotFound();
 
-        var pastes = await GetUserPastes(user, true);
+        var pastes = GetUserPastes(user, true);
 
         return Ok(pastes);
     }

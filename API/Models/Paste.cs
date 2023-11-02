@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
+/// <summary>
+/// The paste provided by the service.
+/// </summary>
 public class Paste
 {
     [MaxLength(32)]

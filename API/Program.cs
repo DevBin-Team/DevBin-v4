@@ -53,6 +53,11 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v4", openApiInfo);
 
     options.DocumentFilter<ApiNameNormalizeFilter>();
+    options.SchemaFilter<EnumSerializeFilter>();
+
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "API.xml"));
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Common.xml"));
+
 
     var securityScheme = new OpenApiSecurityScheme()
     {
