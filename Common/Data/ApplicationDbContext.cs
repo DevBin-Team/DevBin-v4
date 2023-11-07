@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace Common.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
@@ -30,5 +31,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         } while (await Pastes.AnyAsync(q => q.Code == code));
 
         return code;
-    }
+    }    
 }

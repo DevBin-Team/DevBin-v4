@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Common.Models;
@@ -18,4 +19,14 @@ public class Folder
 
     public virtual ApplicationUser User { get; set; }
     public virtual ICollection<Paste> Pastes { get; set; }
+
+    public static string SanitizeName(string name)
+    {
+        name = name.ToLower();
+        name = Regex.Replace(name, @"[^a-z0-9\s-]", "");
+        name = Regex.Replace(name, @"\s+", " ");
+        name = Regex.Replace(name, @"\s", "-");
+        name = name[0..Math.Min(name.Length, 128)];
+        return name;
+    }
 }

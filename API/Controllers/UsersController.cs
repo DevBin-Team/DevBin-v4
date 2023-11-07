@@ -131,4 +131,47 @@ public class UsersController : ControllerBase
 
         return Ok(pastes);
     }
+
+    [HttpPost("me/folders")]
+    [RequireApiToken(ApiToken.APIPermissions.CreateFolder)]
+    public async Task<ActionResult<Models.Folder>> CreateFolder(string folderName)
+    {
+        var me = await _userManager.GetUserAsync(User);
+        if (me == null)
+            return NotFound();
+
+        var slug = Common.Models.Folder.SanitizeName(folderName);
+        if(await _dbContext.Folders.AnyAsync(q => q.UserId == me.Id && q.Slug == slug))
+        {
+            return Conflict("A folder with a similar name already exists");
+        }
+
+        var folder = new Common.Models.Folder()
+        {
+            Name = folderName[0..Math.Min(folderName.Length, 250)],
+            Slug = slug,
+            UserId = me.Id,
+        };
+
+        _dbContext.Folders.Add(folder);
+        await _dbContext.SaveChangesAsync();
+
+        return new Models.Folder()
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            Slug = folder.Slug,
+        };
+    }
+
+    [HttpDelete("me/folders/{id:int}")]
+    [RequireApiToken(ApiToken.APIPermissions.CreateFolder)]
+    public async Task<ActionResult<Models.Folder>> DeleteFolder(int id)
+    {
+        var me = await _userManager.GetUserAsync(User);
+        if (me == null)
+            return NotFound();
+
+        return Ok();
+    }
 }

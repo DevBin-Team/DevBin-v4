@@ -18,13 +18,13 @@ public class ApiToken
         CreatePaste = 2,
         UpdatePaste = 4,
         DeletePaste = 8,
-        GetFolder = 16,
+        CreateFolder = 16,
         DeleteFolder = 32,
         GetMe = 64,
         GetUser = 128,
 
-        ReadOnly = GetPaste | GetFolder | GetMe | GetUser,
-        All = GetPaste | CreatePaste | UpdatePaste | DeletePaste | GetFolder | DeleteFolder | GetMe | GetUser,
+        ReadOnly = GetPaste | CreateFolder | GetMe | GetUser,
+        All = GetPaste | CreatePaste | UpdatePaste | DeletePaste | CreateFolder | DeleteFolder | GetMe | GetUser,
     }
 
     public int Id { get; set; }
